@@ -6,5 +6,6 @@ interface configuration {
     const user = 'root';
     const password = 'P@$$w0rd';
     const database = 'sugarcare';
+    
 }
 ?>

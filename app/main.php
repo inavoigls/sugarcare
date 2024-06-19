@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -126,21 +127,16 @@
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
-        
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2024-2025 <a href="https://www.unir.net/">SugarCare - Universidad Internacional de la Rioja</a>.</strong>
-    Todos los derechos reservados.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 1.0.0
-    </div>
-  </footer>
+  
+  <!-- Footer -->
+  <?php require_once("components/footer.php"); ?>
+  <!-- /.Footer -->
 
   <!-- Control Sidebar -->
   <?php require_once("components/control-sidebar.php"); ?>
