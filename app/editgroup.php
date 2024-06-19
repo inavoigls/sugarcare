@@ -3,7 +3,7 @@ require_once("session.php");
 require_once "../config/configuration.php";
 require_once "dbConnect.php";
 $mysqli = dbConnect::connection();
-$query = "SELECT * FROM usuarios as u INNER JOIN grupos_usuarios as gu on gu.id = u.grupo WHERE nombre='".$_GET["user"]."';";
+$query = "SELECT * FROM grupos_usuarios WHERE grupo='".$_GET["group"]."';";
 try {
     if(!$mysqli->connect_errno) {
         if($rs = $mysqli->query($query)){
@@ -20,7 +20,7 @@ try {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SugarCare | Edit User</title>
+  <title>SugarCare | Edit Group</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -50,12 +50,12 @@ try {
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Editar Usuario</h1>
+            <h1>Editar Grupo</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="main.php">Home</a></li>
-              <li class="breadcrumb-item active">Editar Usuario</li>
+              <li class="breadcrumb-item active">Editar Grupo</li>
             </ol>
           </div>
         </div>
@@ -71,23 +71,15 @@ try {
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title"><?php echo $_GET["user"]?></h3>
+                <h3 class="card-title"><?php echo $_GET["group"]?></h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
               <form>
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Nombre</label>
-                    <input type="text" class="form-control" name="nombre" placeholder="Nombre" value="<?php echo $row['nombre'];?>">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Email</label>
-                    <input type="email" class="form-control" name="email" placeholder="Email" value="<?php echo $row['email'];?>">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputPassword1">Contraseña</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <label for="exampleInputEmail1">Grupo</label>
+                    <input type="text" class="form-control" name="nombre" placeholder="Nombre" value="<?php echo $row['grupo'];?>">
                   </div>
                 </div>
                 <!-- /.card-body -->

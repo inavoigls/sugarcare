@@ -39,7 +39,7 @@
                 </a>
               </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="search.php" class="nav-link">
               <i class="nav-icon fas fa-search"></i>
                 <p>Buscador</p>
             </a>
@@ -63,9 +63,15 @@
             </a>
           </li>
           <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="glucoserecord.php" class="nav-link">
                   <i class="nav-icon fas fa-edit"></i>
                   <p>Registro Glucosa</p>
+                </a>
+          </li>
+          <li class="nav-item">
+                <a href="glucohistory.php" class="nav-link">
+                  <i class="nav-icon fas fa-file"></i>
+                  <p>Diario de Glucosa</p>
                 </a>
           </li>
           <li class="nav-item">
@@ -77,7 +83,7 @@
           <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon fas fa-file"></i>
-                  <p>Diario de control</p>
+                  <p>Diario de comidas</p>
                 </a>
           </li>
           <li class="nav-item">
@@ -93,7 +99,7 @@
             </a>
           </li>
           <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="medicalhistory.php" class="nav-link">
                   <i class="nav-icon fas fa-copy"></i>
                   <p>Historia Clínica</p>
                 </a>
@@ -117,7 +123,7 @@
                 </a>
           </li>
           <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="recommendations.php" class="nav-link">
                   <i class="nav-icon fas fa-book"></i>
                   <p>Recomendaciones</p>
                 </a>

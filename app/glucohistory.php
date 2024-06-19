@@ -8,7 +8,7 @@ require_once "dbConnect.php";
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SugarCare | Groups</title>
+  <title>SugarCare | Glucose history</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -42,12 +42,12 @@ require_once "dbConnect.php";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Grupos</h1>
+            <h1>Histórico Glucosa</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="main.php">Home</a></li>
-              <li class="breadcrumb-item active">Grupos</li>
+              <li class="breadcrumb-item active">Histórico Glucosa</li>
             </ol>
           </div>
         </div>
@@ -61,25 +61,29 @@ require_once "dbConnect.php";
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title"><a href="newgroup.php">Nuevo Grupo</a></h3>
+                <h3 class="card-title"></h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Grupo</th>
+                    <th>Fecha</th>
+                    <th>Glucosa</th>
+                    <th>Hora</th>
                   </tr>
                   </thead>
                   <tbody>
                   <?php 
                   $mysqli = dbConnect::connection();
-                  $query = "SELECT id,grupo FROM grupos_usuarios";
+                  $query = "SELECT * FROM registro_glucosa rg INNER JOIN usuarios u on u.id = rg.usuario WHERE u.nombre = '".$_SESSION["nombre"]."';";
                   try { 
 	                  if(!$mysqli->connect_errno) {
                       if($rs = $mysqli->query($query)){
                         while($row = $rs->fetch_assoc()){
-                          echo "<tr><td><a href='editgroup.php?group=".$row['grupo']."'>".$row["grupo"]."</a></td></tr>";
+                          echo "<tr><td><a href='#'>".$row["fecha"]."</a></td>";
+                          echo "<td>".$row["glucosa"]." mg/dl</td>";
+                          echo "<td>".$row["hora"]."</td></tr>";
                         }
                       }
 		                }
@@ -91,7 +95,9 @@ require_once "dbConnect.php";
                   </tbody>
                   <!--<tfoot>
                   <tr>
-                    <th>Grupo</th>
+                    <th>Fecha</th>
+                    <th>Glucosa</th>
+                    <th>Hora</th>
                   </tr>
                   </tfoot>-->
                 </table>

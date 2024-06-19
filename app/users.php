@@ -68,7 +68,6 @@ require_once "dbConnect.php";
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Id</th>
                     <th>Nombre</th>
                     <th>Email</th>
                     <th>Fecha Alta</th>
@@ -84,12 +83,12 @@ require_once "dbConnect.php";
 	                  if(!$mysqli->connect_errno) {
                       if($rs = $mysqli->query($query)){
                         while($row = $rs->fetch_assoc()){
-                          echo "<tr><td>".$row["id"]."</td>";
-                          echo "<td><a href='editusers.php?user=".$row['nombre']."'>".$row["nombre"]."</a></td>";
+                          echo "<tr><td><a href='editusers.php?user=".$row['nombre']."'>".$row["nombre"]."</a></td>";
                           echo "<td>".$row["email"]."</td>";
                           echo "<td>".$row["fechaalta"]."</td>";
                           echo "<td>".$row["grupo"]."</td>";
-                          echo "<td>".$row["activo"]."</td></tr>";
+                          if($row["activo"]==1){echo "<td>Activo</td></tr>";}
+                          else {echo "<td>Inactivo</td></tr>";}
                         }
                       }
 		                }
@@ -101,7 +100,6 @@ require_once "dbConnect.php";
                   </tbody>
                   <!--<tfoot>
                   <tr>
-                    <th>Id</th>
                     <th>Nombre</th>
                     <th>Email</th>
                     <th>Fecha Alta</th>
