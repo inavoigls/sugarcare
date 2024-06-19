@@ -69,7 +69,6 @@ require_once("session.php");
                   </div>
                 </div>
                 <!-- /.card-body -->
-
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
