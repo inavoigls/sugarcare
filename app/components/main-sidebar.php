@@ -28,16 +28,16 @@
           </div>
         </div>
       </div>
-
+     
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
-                <a href="main.php" class="nav-link <!--active-->">
-                  <i class="nav-icon fas fa-tachometer-alt"></i>
-                  <p>Dashboard</p>
-                </a>
-              </li>
+            <a href="main.php" class="nav-link <!--active-->">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
           <li class="nav-item">
             <a href="search.php" class="nav-link">
               <i class="nav-icon fas fa-search"></i>
@@ -45,55 +45,62 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon far fa-envelope"></i>
-                <p>Buzón</p>
-              </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="calendar.php" class="nav-link">
               <i class="nav-icon far fa-calendar-alt"></i>
               <p>Calendario</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="notifications.php" class="nav-link">
               <i class="nav-icon far fa-bell"></i>
               <p>Notificaciones</p>
             </a>
           </li>
+          <?php if($_SESSION["idgrupo"]=="2") {?>
           <li class="nav-item">
-                <a href="glucoserecord.php" class="nav-link">
-                  <i class="nav-icon fas fa-edit"></i>
-                  <p>Registro Glucosa</p>
-                </a>
+            <a href="glicemia-record.php" class="nav-link">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>Registro Glicemia</p>
+            </a>
           </li>
           <li class="nav-item">
-                <a href="glucohistory.php" class="nav-link">
-                  <i class="nav-icon fas fa-file"></i>
-                  <p>Diario de Glucosa</p>
-                </a>
+            <a href="glicemia-history.php" class="nav-link">
+              <i class="nav-icon fas fa-file"></i>
+              <p>Diario de Glicemia</p>
+            </a>
           </li>
           <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-chart-pie"></i>
-                  <p>Registro de comidas</p>
-                </a>
+            <a href="weight-record.php" class="nav-link">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>Registro Peso</p>
+            </a>
           </li>
           <li class="nav-item">
-                <a href="#" class="nav-link">
+            <a href="weight-history.php" class="nav-link">
+              <i class="nav-icon fas fa-file"></i>
+              <p>Diario de Peso</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="food-record.php" class="nav-link">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>Registro de comidas</p>
+            </a>
+          </li>
+          <li class="nav-item">
+                <a href="food-history.php" class="nav-link">
                   <i class="nav-icon fas fa-file"></i>
                   <p>Diario de comidas</p>
                 </a>
           </li>
           <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="activity-record.php" class="nav-link">
                   <i class="nav-icon fas fa-edit"></i>
                   <p>Registro Actividad</p>
                 </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="activity-history.php" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
               <p>Diario de Actividad</p>
             </a>
@@ -105,11 +112,24 @@
                 </a>
           </li>
           <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="recommendations.php" class="nav-link">
+                  <i class="nav-icon fas fa-book"></i>
+                  <p>Recomendaciones</p>
+                </a>
+          </li>
+          <li class="nav-item">
+                <a href="advance-analysis.php" class="nav-link">
                   <i class="nav-icon fas fa-table"></i>
                   <p>Análisis avanzado</p>
                 </a>
           </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>Retos</p>
+            </a>
+          </li>
+          <?php } else {?>
           <li class="nav-item">
                 <a href="users.php" class="nav-link">
                   <i class="nav-icon fas fa-users"></i>
@@ -121,36 +141,7 @@
                   <i class="nav-icon fas fa-users"></i>
                   <p>Grupos</p>
                 </a>
-          </li>
-          <li class="nav-item">
-                <a href="recommendations.php" class="nav-link">
-                  <i class="nav-icon fas fa-book"></i>
-                  <p>Recomendaciones</p>
-                </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>Retos</p>
-            </a>
-          </li>
-          <!--<li class="nav-item">
-            <a href="pages/gallery.html" class="nav-link">
-              <i class="nav-icon far fa-image"></i>
-              <p>
-                Galería
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="pages/kanban.html" class="nav-link">
-              <i class="nav-icon fas fa-columns"></i>
-              <p>
-                Kanban Board
-              </p>
-            </a>
-          </li>-->
-          
+          </li><?php }?>          
           <li class="nav-item">
             <a href="logout.php" class="nav-link">
               <p>Salir</p>

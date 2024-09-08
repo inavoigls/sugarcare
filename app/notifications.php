@@ -1,15 +1,38 @@
 <?php 
 require_once("session.php");
-require_once "../config/configuration.php";
 require_once "dbConnect.php";
+require_once "../config/configuration.php";
+function check(){
+$mysqli = dbConnect::connection();
+  if(isset($_GET["read"])){
+    $query = "UPDATE notificaciones as n INNER JOIN usuarios u on u.id = n.usuario SET n.leida = 1 WHERE n.id = ".$_GET["read"]." and u.nombre = '".$_SESSION["nombre"]."';";
+    try { 
+	    if(!$mysqli->connect_errno) {
+        $rs = $mysqli->query($query);
+		  }
+    } catch (Exception $ex) {
+	    echo $ex->getMessage();
+    }
+  } else if (isset($_GET["delete"])){
+    $query = "DELETE FROM notificaciones as n WHERE n.id = ".$_GET["delete"].";";
+    try { 
+	    if(!$mysqli->connect_errno) {
+        $rs = $mysqli->query($query);
+		  }
+    } catch (Exception $ex) {
+	    echo $ex->getMessage();
+    }
+  }
+  $mysqli->close();
+}
+check();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SugarCare | Glucose history</title>
-
+  <title>SugarCare | Notificaciones</title>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -42,12 +65,12 @@ require_once "dbConnect.php";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Histórico Glucosa</h1>
+            <h1>Notificaciones</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="main.php">Home</a></li>
-              <li class="breadcrumb-item active">Histórico Glucosa</li>
+              <li class="breadcrumb-item active">Notificaciones</li>
             </ol>
           </div>
         </div>
@@ -69,38 +92,43 @@ require_once "dbConnect.php";
                   <thead>
                   <tr>
                     <th>Fecha</th>
-                    <th>Glucosa</th>
-                    <th>Hora</th>
+                    <th>Notificación</th>
+                    <th>Descripción</th>
+                    <th>Accciones</th>
                   </tr>
                   </thead>
                   <tbody>
                   <?php 
-                  $mysqli = dbConnect::connection();
-                  $query = "SELECT * FROM registro_glucosa rg INNER JOIN usuarios u on u.id = rg.usuario WHERE u.nombre = '".$_SESSION["nombre"]."';";
-                  try { 
-	                  if(!$mysqli->connect_errno) {
+                  $query = "SELECT n.id, n.orden, n.fecha, n.titulo, n.notificacion, n.leida FROM notificaciones n INNER JOIN usuarios u on u.id = n.usuario WHERE u.nombre = '".$_SESSION["nombre"]."' ORDER BY n.id ASC;";
+                  try {
+                    $mysqli = dbConnect::connection();
+                    $cont=1;
+                    if(!$mysqli->connect_errno) {
                       if($rs = $mysqli->query($query)){
                         while($row = $rs->fetch_assoc()){
-                          echo "<tr><td><a href='#'>".$row["fecha"]."</a></td>";
-                          echo "<td>".$row["glucosa"]." mg/dl</td>";
-                          echo "<td>".$row["hora"]."</td></tr>";
+                          echo "<tr><td>".$row["fecha"]."</td>";
+                          if($row["leida"]== 0){echo "<td><b>".$row["titulo"]."</b></td>";}else {echo "<td>".$row["titulo"]."</td>";}
+                          echo "<td>".$row["notificacion"]."</td>";
+                          echo "<td><a href='notifications.php?read=".$row["id"]."'>Leer</a> | <a href='notifications.php?delete=".$row["id"]."'>Eliminar</a></td></tr>";
                         }
                       }
 		                }
 	                  $mysqli->close();
                   } catch (Exception $ex) {
 	                  echo $ex->getMessage();
-                  } 
+                  }
                   ?>
                   </tbody>
                   <!--<tfoot>
                   <tr>
+                    <th>Id</th>
                     <th>Fecha</th>
-                    <th>Glucosa</th>
-                    <th>Hora</th>
+                    <th>Notificación</th>
+                    <th>Descripción</th>
                   </tr>
                   </tfoot>-->
                 </table>
+                
               </div>
               <!-- /.card-body -->
             </div>

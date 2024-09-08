@@ -1,4 +1,6 @@
-<?php require_once("session.php");?>
+<?php require_once("session.php");
+require_once("../config/configuration.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,22 +11,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="../plugins/jqvmap/jqvmap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../dist/css/adminlte.min.css">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
-  <!-- summernote -->
-  <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -72,45 +60,80 @@
         <div class="col-lg-6">
             <div class="card card-primary card-outline">
               <div class="card-header">
-                <h5 class="m-0">Contenedor informativo 1</h5>
+                <h5 class="m-0">Datos del usuario:</h5>
               </div>
               <div class="card-body">
-                <h6 class="card-title">Titulo Contenedor 1</h6>
-
-                <p class="card-text">Texto contenedor infomativo 1</p>
-                <a href="#" class="btn btn-primary">Ir</a>
+                <!--<h6 class="card-title">Titulo</h6>-->
+                <p class="card-text">
+                  <?php
+                    echo "<b>Nombre: </b>".$_SESSION["nombre"];
+                    echo "<br><b>Email: </b>".$_SESSION["email"];
+                    echo "<br><b>Grupo: </b>".$_SESSION["grupo"];
+                    if($_SESSION["idgrupo"]==2){
+                      if($_SESSION["fecha_nacimiento"]!=""){echo "<br><b>Fecha Nacimiento: </b>".$_SESSION["fecha_nacimiento"];}
+                      $date = date('d/m/Y');
+                      $year = explode('/',$date);
+                      $fnac=explode('/',$_SESSION["fecha_nacimiento"]);
+                      if($_SESSION["fecha_nacimiento"]!=""){echo "<br><b>Edad: </b>".($year[2]-$fnac[2]);}
+                      if($_SESSION["altura"]!=""){echo "<br><b>Altura: </b>".$_SESSION["altura"];}
+                      if($_SESSION["complexion"]!=""){echo "<br><b>Complexión: </b>".$_SESSION["complexion"];}
+                      if($_SESSION["foto"]!=""){echo "<br><b>Foto: </b>".$_SESSION["foto"];}
+                    }
+                  ?>
+                </p>
+                <!--<a href="#" class="btn btn-primary">Ir</a>-->
               </div>
             </div>
-
+            <?php if($_SESSION["idgrupo"]==2){?>
             <div class="card card-primary card-outline">
               <div class="card-header">
-                <h5 class="m-0">Contenedor informativo 2</h5>
+                <h5 class="m-0">Personal médico asignado</h5>
               </div>
               <div class="card-body">
-                <h6 class="card-title">Titulo Contenedor 2</h6>
+                <!--<h6 class="card-title">Titulo Contenedor 2</h6>-->
+                <p class="card-text">
+                  <?php
+                  $mysqli = dbConnect::connection();
+                  $query = "SELECT um.medico, (SELECT u2.nombre FROM usuarios u2 WHERE u2.id = um.medico) as nombre_medico
+                              FROM usuarios u
+                              LEFT JOIN usuarios_medicos um on um.usuario = u.id
+                              WHERE u.id = ".$_SESSION['id'];           
+                    try {
+                        if(!$mysqli->connect_errno) {
+                          if($rs = $mysqli->query($query)){
+                            while($row = $rs->fetch_assoc()){
+                              echo '<a href="#">'.$row["nombre_medico"].'</a>';
+                            }
+                          }
+                        }
+                        $mysqli->close();
+                    } catch (Exception $ex) {
+                      echo $ex->getMessage();
+                    }
+                  ?>
+                </p>
+                <!--<a href="#" class="btn btn-primary">Ir</a>-->
 
-                <p class="card-text">Texto contenedor infomativo 2</p>
-                <a href="#" class="btn btn-primary">Ir</a>
               </div>
-            </div>
+            </div><?php } ?>
           </div>
           <!-- /.col-md-6 -->
 
           <!-- /.col-md-6 -->
+          <?php if($_SESSION["idgrupo"]==2){?>
           <div class="col-lg-6">
             <div class="card card-primary card-outline">
               <div class="card-header">
-                <h5 class="m-0">Contenedor informativo 3</h5>
+                <h5 class="m-0">Código QR</h5>
               </div>
               <div class="card-body">
-                <h6 class="card-title">Titulo Contenedor 3</h6>
-
-                <p class="card-text">Texto contenedor infomativo 3</p>
-                <a href="#" class="btn btn-primary">Ir</a>
+                <!--<h6 class="card-title"></h6>-->
+                <p class="card-text"><div id="codigoqr"></div></p>
+                <!--<a href="#" class="btn btn-primary">Ir</a>-->
               </div>
             </div>
 
-            <div class="card card-primary card-outline">
+            <!--<div class="card card-primary card-outline">
               <div class="card-header">
                 <h5 class="m-0">Contenedor informativo 4</h5>
               </div>
@@ -120,8 +143,8 @@
                 <p class="card-text">Texto contenedor infomativo 4</p>
                 <a href="#" class="btn btn-primary">Ir</a>
               </div>
-            </div>
-          </div>
+            </div>-->
+          </div><?php } ?>
           <!-- /.col-md-6 -->
         </div>
         <!-- /.row -->
@@ -145,42 +168,30 @@
 <!-- ./wrapper -->
 
 <!-- Dependencias -->
-<?php //require_once("components/js-dependencies.php"); ?>
 <!-- jQuery -->
 <script src="../plugins/jquery/jquery.min.js"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button)
-</script>
 <!-- Bootstrap 4 -->
 <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- ChartJS -->
-<script src="../plugins/chart.js/Chart.min.js"></script>
-<!-- Sparkline -->
-<script src="../plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="../plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="../plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="../plugins/jquery-knob/jquery.knob.min.js"></script>
-<!-- daterangepicker -->
-<script src="../plugins/moment/moment.min.js"></script>
-<script src="../plugins/daterangepicker/daterangepicker.js"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<!-- Summernote -->
-<script src="../plugins/summernote/summernote-bs4.min.js"></script>
-<!-- overlayScrollbars -->
-<script src="../plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- bs-custom-file-input -->
+<script src="../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE -->
-<script src="../dist/js/adminlte.js"></script>
-<!-- App JS -->
 <script src="../dist/js/app.js"></script>
-<!-- AdminLTE dashboard -->
-<script src="../dist/js/pages/dashboard.js"></script>
+<!-- QrCode -->
+<script src="../dist/js/qrcode.js"></script>
+<!-- Page specific script -->
 <!-- Dependencias -->
 
+<?php $hash="4G{ZGnf9q]YCkq4%Qy6Qx_";echo '<script>var option="'.base64_encode($hash.$_SESSION["id"]).'";</script>';?>
+<script>
+function generarCodigoQr() {
+    let url = "http://192.168.1.166/projects/sugarcare/api/assign.php?key="+option;
+    console.log(url);
+    let contenedorCodigoQr = document.getElementById("codigoqr");
+    new QRCode(contenedorCodigoQr, url);
+}
+generarCodigoQr();
+</script>
 </body>
 </html>

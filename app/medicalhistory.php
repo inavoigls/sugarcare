@@ -1,4 +1,46 @@
-<?php require_once("session.php");?>
+<?php
+require_once("session.php");
+require_once "dbConnect.php";
+require_once "../config/configuration.php";
+if(isset($_POST['editar_historia']) && isset($_POST['editar_indicaciones']) && isset($_POST['editar_medicacion'])){
+  $mysqli = dbConnect::connection();
+  $usuario = $_SESSION['id'];
+  $historia = $_POST['editar_historia'];
+  $indicaciones = $_POST['editar_indicaciones'];
+  $medicacion=$_POST['editar_medicacion'];
+  $query = "UPDATE historial SET historia = '$historia', indicaciones = '$indicaciones', medicacion = '$medicacion' WHERE usuario = $usuario;";
+  //echo "QUERY:".$query;
+  try {
+      if(!$mysqli->connect_errno) {
+          if($rs = $mysqli->query($query)){
+              echo "Registro de historial actualizado";
+              unset($_POST['editar_historia'],$_POST['editar_indicaciones'],$_POST['editar_medicacion']);
+          }
+      }
+      $mysqli->close();
+  } catch (Exception $ex) {
+    echo "El registro del historial no se ha podido actualizar. Inténtalo de nuevo."; 
+    echo $ex->getMessage();
+  }
+}
+//Load historial data
+$query = "SELECT * FROM historial h INNER JOIN usuarios u on u.id = h.usuario WHERE u.nombre = '".$_SESSION["nombre"]."';";
+try {
+  $mysqli = dbConnect::connection();
+  if(!$mysqli->connect_errno) {
+    if($rs = $mysqli->query($query)){
+      while($row = $rs->fetch_assoc()){
+        if($row["historia"]){$historia = $row["historia"];}
+        if($row["indicaciones"]){$indicaciones = $row["indicaciones"];}
+        if($row["medicacion"]){$medicacion = $row["medicacion"];}
+      }
+    }
+  }
+  $mysqli->close();
+} catch (Exception $ex) {
+  echo $ex->getMessage();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +67,8 @@
   <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
-
+  <!-- Custom -->
+  <link rel="stylesheet" href="../css/custom.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -64,76 +107,29 @@
 
     <!-- Main content -->
     <section class="content">
+    <form method="post">
       <div class="container-fluid">
         
       <div class="content">
       <div class="container-fluid">
         <div class="row">
-        <div class="col-lg-6">
+          <div class="col-lg-6">
             <div class="card card-primary card-outline">
               <div class="card-header">
                 <h5 class="m-0">Historial Médico</h5>
               </div>
               <div class="card-body">
                 <h6 class="card-title"></h6>
-
-                <p class="card-text">
-                <b>Datos de filiación:</b>
-Paciente masculino de 67 años de edad, mestizo, nacido y residente en Ambato
-(Atahualpa), casado, instrucción secundaria incompleta, obrero en construcción,
-católico, diestro, grupo sanguíneo A, factor RH positivo.
-Motivo de Consulta
-Polidipsia
-                </p>
-                <p class="card-text">
-<b>Enfermedad Actual:</b>
-Paciente refiere que desde hace aproximadamente 48 horas presenta polidipsia, como causa
-aparente omisión de administración de Insulina, se acompaña de polifagia, astenia,
-sensación de mareo y acufenos, el cuadro intensifica con el pasar de las horas , por lo que
-una hora antes de su ingreso acude a Centro de Salud de Atahualpa, donde realizan
-glicemia capilar en ayunas con ausencia de marcación de glucómetro razón por la cual que
-fue referido al servicio de Emergencia del Hospital General Docente Ambato.
-Antecedentes Patológicos Personales (APP)
-                </p>
-                <p class="card-text">
-<b>Clínicos:</b>
-Diabetes Mellitus Tipo 2 diagnosticada hace aproximadamente 14 años en tratamiento
-con Insulina NPH 16 UI en la mañana (8:00 am) y 22 UI en la noche (20:00pm).
-Hospitalizado por 4 ocasiones en el 2014 por Diabetes Mellitus descompensada.
-Retinopatía Diabética Grado 3 (No proliferativa Moderada) diagnosticada hace
-aproximadamente 2 años.
-No refiere alergias.
-Sin antecedentes quirúrgicos de importancia.
-Antecedentes Patológicos Familiares (APF):
-Madre con Diabetes Mellitus Tipo 2.
-                </p>
-                <p class="card-text">
-                EXAMEN FÍSICO
-Signos vitales
-Al ingreso signos vitales: presenta una tensión arterial de 140/100 mmHg, frecuencia
-cardiaca de 102 latidos por minuto, frecuencia respiratoria de 20 respiraciones por
-minuto, temperatura axilar de 36.8 grados centígrados.
-Medidas Antropométricas
-Peso de 54 kilogramos, talla de 1,48 m, índice de masa corporal de 24.65Kg/m
-²(Normal), saturación O2 de 90% sin aporte extra de oxígeno.
-Apariencia General
-Paciente masculino, biotipo normosómico, cuya apariencia concuerda con edad real,
-descansa en decúbito dorsal, vigil, orientado, taquicárdico, afebril.
-Examen Físico Regional
-Piel: palidez generalizada, elasticidad disminuida. Cabeza normocefálica. Ojos, pupilas
-isocóricas aproximadamente de 2mm, normoreactivas a la luz y acomodación. Boca,
-mucosas orales secas, lengua saburral. Auscultación cardiaca y pulmonar: Ruidos
-Cardiacos taquicárdicos (102 latidos por minuto), Pulmones Murmullo vesicular conservado.
-6
-Abdomen: suave, depresible, no doloroso a la palpación superficial ni profunda.
-Extremidades: simétricas, no edemas.
-                </p>
-                <a href="#" class="btn btn-primary">Editar</a>
+                <div class="form-group" id="editar_historia">
+                  <textarea id="inputDescription"  name="editar_historia" class="form-control" rows="25"><?php echo $historia;?></textarea>
+                </div>
+                <div class="card-text" id="historia" name="historia">
+                  <?php echo $historia;?>
+                </div>
               </div>
             </div>
           </div>
           <!-- /.col-md-6 -->
-
           <!-- /.col-md-6 -->
           <div class="col-lg-6">
             <div class="card card-primary card-outline">
@@ -142,14 +138,26 @@ Extremidades: simétricas, no edemas.
               </div>
               <div class="card-body">
                 <h6 class="card-title"></h6>
-
-                <p class="card-text">
-                1. Dieta para Diabético 1500 kcal fraccionadas en cinco tomas.
-                2. Control Glicemias frecuente
-                3. Control de Ingesta
-                4. Insulina NPH 20 UI SC 7:00 am, 10 UI SC 20:00 pm.
-                </p>
-                <a href="#" class="btn btn-primary">Editar</a>
+                <div class="form-group" id="editar_indicaciones">
+                  <textarea id="inputDescription" name="editar_indicaciones" class="form-control" rows="5"><?php echo $indicaciones;?></textarea>
+                </div>
+                <div class="card-text" id="indicaciones" name="indicaciones">
+                  <?php echo $indicaciones;?>
+                </div>
+              </div>
+            </div>
+            <div class="card card-primary card-outline">
+              <div class="card-header">
+                <h5 class="m-0">Medicación</h5>
+              </div>
+              <div class="card-body">
+                <h6 class="card-title"></h6>
+                <div class="form-group" id="editar_medicacion">
+                  <textarea id="inputDescription" name="editar_medicacion" class="form-control" rows="5"><?php echo $medicacion;?></textarea>
+                </div>
+                <div class="card-text" id="medicacion" name="medicacion">
+                  <?php echo $medicacion;?>
+                </div>
               </div>
             </div>
           </div>
@@ -157,9 +165,16 @@ Extremidades: simétricas, no edemas.
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
-    </div>
-        <!-- /.row (main row) -->
+      </div>
+      <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
+      <div class="card-footer">
+        <!-- <button class="btn btn-primary" oncli>Editar</button>-->
+        <a href="#" onclick='editar()' id="btn_editar" class="btn btn-primary" oncli>Editar</a>
+        <button type="submit" id="btn_guardar" class="btn btn-primary">Guardar</button>
+        <button type="cancel" id="btn_cancelar" class="btn btn-primary">Cancelar</button>
+      </div>
+      </form>
     </section>
     <!-- /.content -->
   </div>
@@ -212,6 +227,25 @@ Extremidades: simétricas, no edemas.
 <!-- AdminLTE dashboard -->
 <script src="../dist/js/pages/dashboard.js"></script>
 <!-- Dependencias -->
+<script>
+//Set initial properties
+document.getElementById("editar_historia").style.display = "none";
+document.getElementById("editar_indicaciones").style.display = "none";
+document.getElementById("editar_medicacion").style.display = "none";
+document.getElementById("btn_guardar").style.display = "none";
+document.getElementById("btn_cancelar").style.display = "none";
 
+function editar(){
+  document.getElementById("historia").style.display = "none";
+  document.getElementById("editar_historia").style.display = "block";
+  document.getElementById("indicaciones").style.display = "none";
+  document.getElementById("editar_indicaciones").style.display = "block";
+  document.getElementById("medicacion").style.display = "none";
+  document.getElementById("editar_medicacion").style.display = "block";
+  document.getElementById("btn_editar").style.display = "none";
+  document.getElementById("btn_guardar").style.display = "inline-block";
+  document.getElementById("btn_cancelar").style.display = "inline-block";
+}
+</script>
 </body>
 </html>

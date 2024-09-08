@@ -1,19 +1,28 @@
 <?php 
 require_once("session.php");
-require_once "../config/configuration.php";
 require_once "dbConnect.php";
-/*$mysqli = dbConnect::connection();
-$query = "SELECT * FROM usuarios as u INNER JOIN grupos_usuarios as gu on gu.id = u.grupo WHERE nombre='".$_GET["user"]."';";
+require_once "../config/configuration.php";
+function save(){
+/*if(isset($_POST['glicemia']) && $_POST['glicemia']!="" && $_POST['fecha']!="" && $_POST['hora']!=""){
+$mysqli = dbConnect::connection();
+$grupo=$_SESSION['grupo'];
+$fecha = $_POST['fecha'];
+$hora = $_POST['hora'];
+$glicemia=$_POST['glicemia'];
+$query = "INSERT INTO registro_glucosa (usuario,fecha,glucosa,hora) values ($grupo, '$fecha', $glicemia,'$hora');";
 try {
     if(!$mysqli->connect_errno) {
         if($rs = $mysqli->query($query)){
-            $row = $rs->fetch_assoc();   
+            echo "Registro de glicemia realizado"; 
         }
 	}
 	$mysqli->close();
     } catch (Exception $ex) {
+      echo "El registro glicemia no se ha podido realizar. Inténtalo de nuevo."; 
 	    echo $ex->getMessage();
-    }*/
+    }
+}*/
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,12 +59,12 @@ try {
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Registro Glucosa</h1>
+            <h1>Registro Glicemia</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="main.php">Home</a></li>
-              <li class="breadcrumb-item active">Registro Glucosa</li>
+              <li class="breadcrumb-item active">Registro Glicemia</li>
             </ol>
           </div>
         </div>
@@ -71,23 +80,23 @@ try {
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Registro Glucosa <?php echo $_SESSION["nombre"]?></h3>
+                <h3 class="card-title">Registro Glicemia</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form>
+              <form method="post">
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Fecha</label>
-                    <input type="text" class="form-control" name="nombre" placeholder="Fecha">
+                    <input type="text" class="form-control" name="fecha" placeholder="dd/mm/aaaa">
                   </div>
                   <div class="form-group">
                     <label for="exampleInputEmail1">Hora</label>
-                    <input type="text" class="form-control" name="nombre" placeholder="00:00">
+                    <input type="text" class="form-control" name="hora" placeholder="00:00">
                   </div>
                   <div class="form-group">
                     <label for="exampleInputEmail1">Glucosa</label>
-                    <input type="text" class="form-control" name="nombre" placeholder="mg/dl">
+                    <input type="text" class="form-control" name="glicemia" placeholder="mg/dl">
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -96,7 +105,8 @@ try {
                   <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
               </form>
-            </div>          
+            </div>
+            <?php save();?>     
             <!-- /.card -->
           </div>
           <!--/.col (right) -->

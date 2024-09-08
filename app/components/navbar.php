@@ -1,3 +1,4 @@
+<?php require_once("mynotifications.php");?>
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
@@ -43,13 +44,13 @@
           <span class="badge badge-warning navbar-badge">2</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">2 Notificationes</span>
+          <span class="dropdown-item dropdown-header"><?php echo $num_notificaciones?> Notificaciones</span>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> Mensajes nuevos
-            <span class="float-right text-muted text-sm">1</span>
+          <a href="notifications.php" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> Sin leer
+            <span class="float-right text-muted text-sm"><?php echo $no_leidas?></span>
           </a>
-          <div class="dropdown-divider"></div>
+          <!--<div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item">
             <i class="fas fa-users mr-2"></i>Contactos
             <span class="float-right text-muted text-sm">1</span>
@@ -59,8 +60,8 @@
             <i class="fas fa-file mr-2"></i>Solicitudes pendientes
             <span class="float-right text-muted text-sm">0</span>
           </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+          <div class="dropdown-divider"></div>-->
+          <a href="notifications.php" class="dropdown-item dropdown-footer">Ver todas</a>
         </div>
       </li>
       <li class="nav-item">

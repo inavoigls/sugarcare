@@ -1,4 +1,8 @@
-<?php require_once("session.php");?>
+<?php
+require_once("session.php");
+require_once "dbConnect.php";
+require_once "../config/configuration.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,58 +74,52 @@
       <div class="container-fluid">
         <div class="row">
         <div class="col-lg-6">
-            <div class="card card-primary card-outline">
-              <div class="card-header">
-                <h5 class="m-0">Recomendación 1</h5>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">Anticipa el horario de comidas</h6>
+            <?php 
+                 $query = "SELECT r.id, r.orden,r.titulo, r.recomendacion FROM recomendaciones r INNER JOIN usuarios u on u.id = r.usuario WHERE u.nombre = '".$_SESSION["nombre"]."';";
+                 try {
+                   $mysqli = dbConnect::connection();
+                   $cont=1;
+                   if(!$mysqli->connect_errno) {
+                     if($rs = $mysqli->query($query)){
+                       while($row = $rs->fetch_assoc()){?>
+                        <div class="card card-primary card-outline">
+                            <div class="card-header">
+                            <h5 class="m-0"><?php echo "Recomendación $cont" ?></h5>
+                          </div>
+                          <div class="card-body">
+                            <h6 class="card-title"><b><?php echo $row["titulo"]?></b></h6>
 
-                <p class="card-text">Anticipar el horario de comidas te va a ayudar a mejorar el metabolismo y evitar subidas de glucemia por la noche</p>
-                <a href="#" class="btn btn-primary">Leer más</a>
-              </div>
-            </div>
-
-            <div class="card card-primary card-outline">
-              <div class="card-header">
-                <h5 class="m-0">Recomendación 2</h5>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">Se regular en la toma de la medicación y horarios</h6>
-
-                <p class="card-text">Ser riguroso con los horarios te ayudará a mantener un mejor control de la glucemia</p>
-                <a href="#" class="btn btn-primary">Leer más</a>
-              </div>
-            </div>
+                            <p class="card-text"><?php echo $row["recomendacion"]?></p>
+                            <a href="#" class="btn btn-primary">Leer más</a>
+                          </div>
+                        </div>
+                        <?php
+                        $cont++;
+                       }
+                     }
+                   }
+                   $mysqli->close();
+                 } catch (Exception $ex) {
+                   echo $ex->getMessage();
+                 }
+            ?>
           </div>
           <!-- /.col-md-6 -->
 
           <!-- /.col-md-6 -->
-          <!--<div class="col-lg-6">
-            <div class="card card-primary card-outline">
+          <div class="col-lg-6">
+            <!--<div class="card card-primary card-outline">
               <div class="card-header">
-                <h5 class="m-0">Contenedor informativo 3</h5>
+                <h5 class="m-0">title 1</h5>
               </div>
               <div class="card-body">
-                <h6 class="card-title">Titulo Contenedor 3</h6>
+                <h6 class="card-title"><b>title 2</b></h6>
 
-                <p class="card-text">Texto contenedor infomativo 3</p>
+                <p class="card-text">.</p>
                 <a href="#" class="btn btn-primary">Ir</a>
               </div>
-            </div>
-
-            <div class="card card-primary card-outline">
-              <div class="card-header">
-                <h5 class="m-0">Contenedor informativo 4</h5>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">Titulo Contenedor 4</h6>
-
-                <p class="card-text">Texto contenedor infomativo 4</p>
-                <a href="#" class="btn btn-primary">Ir</a>
-              </div>
-            </div>
-          </div>-->
+            </div>-->    
+          </div>
           <!-- /.col-md-6 -->
         </div>
         <!-- /.row -->

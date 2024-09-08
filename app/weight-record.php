@@ -1,26 +1,35 @@
 <?php 
 require_once("session.php");
-require_once "../config/configuration.php";
 require_once "dbConnect.php";
+require_once "../config/configuration.php";
+function save(){
+if(isset($_POST['peso']) && $_POST['peso']!="" && $_POST['fecha']!="" && $_POST['hora']!=""){
 $mysqli = dbConnect::connection();
-$query = "SELECT * FROM usuarios as u INNER JOIN grupos_usuarios as gu ON gu.id = u.grupo LEFT JOIN datos_usuario as du ON du.usuario = u.id WHERE u.nombre='".$_GET["user"]."';";
+$grupo=$_SESSION['grupo'];
+$fecha = $_POST['fecha'];
+$hora = $_POST['hora'];
+$peso=$_POST['peso'];
+$query = "INSERT INTO registro_peso (usuario,fecha,hora,peso) values ($grupo, '$fecha', '$hora', $peso);";
 try {
     if(!$mysqli->connect_errno) {
         if($rs = $mysqli->query($query)){
-            $row = $rs->fetch_assoc();   
+            echo "Registro de peso realizado"; 
         }
 	}
 	$mysqli->close();
     } catch (Exception $ex) {
+      echo "El registro peso no se ha podido realizar. Inténtalo de nuevo."; 
 	    echo $ex->getMessage();
     }
+}
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SugarCare | Edit User</title>
+  <title>SugarCare | Registro Peso</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -50,12 +59,12 @@ try {
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Editar Usuario</h1>
+            <h1>Registro Peso</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="main.php">Home</a></li>
-              <li class="breadcrumb-item active">Editar Usuario</li>
+              <li class="breadcrumb-item active">Registro Peso</li>
             </ol>
           </div>
         </div>
@@ -71,57 +80,34 @@ try {
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title"><?php echo $_GET["user"]?></h3>
+                <h3 class="card-title">Registro Peso</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="editusers.php" method="post">
+              <form method="post">
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Nombre</label>
-                    <input type="text" class="form-control" name="nombre" placeholder="Nombre" value="<?php echo $row['nombre'];?>" readonly>
+                    <label for="exampleInputEmail1">Fecha</label>
+                    <input type="text" class="form-control" name="fecha" placeholder="dd/mm/aaaa">
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Email</label>
-                    <input type="email" class="form-control" name="email" placeholder="Email" value="<?php echo $row['email'];?>">
+                    <label for="exampleInputEmail1">Hora</label>
+                    <input type="text" class="form-control" name="hora" placeholder="00:00">
                   </div>
                   <div class="form-group">
-                    <label for="exampleInputPassword1">Contraseña</label>
-                    <input type="password" class="form-control" id="password" placeholder="Password">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInput">Fecha nacimiento</label>
-                    <input type="text" class="form-control" id="edad" placeholder="fechanacimiento" value="<?php echo $row['fechanacimiento'];?>">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInput">Altura</label>
-                    <input type="text" class="form-control" id="altura" placeholder="altura" value="<?php echo $row['altura'];?>">
-                  </div>
-                  <div class="form-group" data-select2-id="29">
-                    <label>Complexión</label>
-                    <select class="form-control" style="width: 100%;" type="text" name="Complexión">
-                    <option data-select2-id="00" <?php if($row['complexion']==""){echo 'selected="selected"';}?>></option>
-                      <option data-select2-id="01" <?php if($row['complexion']=="Pequeña"){echo 'selected="selected"';}?>>Pequeña</option>
-                      <option data-select2-id="02" <?php if($row['complexion']=="Mediana"){echo 'selected="selected"';}?>>Mediana</option>
-                      <option data-select2-id="03" <?php if($row['complexion']=="Grande"){echo 'selected="selected"';}?>>Granda</option>
-                    </select>
+                    <label for="exampleInputEmail1">Peso</label>
+                    <input type="text" class="form-control" name="peso" placeholder="Kg">
                   </div>
 
-                  <div class="form-group" data-select2-id="29">
-                    <label>Activo</label>
-                    <select class="form-control" style="width: 100%;" type="text" name="Complexión">
-                      <option data-select2-id="01" <?php if($row['activo']=="1"){echo 'selected="selected"';}?>>Y</option>
-                      <option data-select2-id="02" <?php if($row['activo']=="0"){echo 'selected="selected"';}?>>N</option>
-                    </select>
-                  </div>
                 </div>
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Guardar</button> <button type="submit" class="btn btn-primary">Eliminar</button>
+                  <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
               </form>
-            </div>          
+            </div>
+            <?php save();?>     
             <!-- /.card -->
           </div>
           <!--/.col (right) -->
