@@ -7,7 +7,7 @@ $query = "SELECT * FROM usuarios as u INNER JOIN grupos_usuarios as gu ON gu.id 
 try {
     if(!$mysqli->connect_errno) {
         if($rs = $mysqli->query($query)){
-            $row = $rs->fetch_assoc();   
+            $row = $rs->fetch_assoc();
         }
 	}
 	$mysqli->close();
@@ -20,7 +20,7 @@ try {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SugarCare | Edit User</title>
+  <title>SugarCare | Editar Usuario</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -103,7 +103,7 @@ try {
                     <option data-select2-id="00" <?php if($row['complexion']==""){echo 'selected="selected"';}?>></option>
                       <option data-select2-id="01" <?php if($row['complexion']=="Pequeña"){echo 'selected="selected"';}?>>Pequeña</option>
                       <option data-select2-id="02" <?php if($row['complexion']=="Mediana"){echo 'selected="selected"';}?>>Mediana</option>
-                      <option data-select2-id="03" <?php if($row['complexion']=="Grande"){echo 'selected="selected"';}?>>Granda</option>
+                      <option data-select2-id="03" <?php if($row['complexion']=="Grande"){echo 'selected="selected"';}?>>Grande</option>
                     </select>
                   </div>
 

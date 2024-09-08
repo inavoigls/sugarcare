@@ -13,7 +13,8 @@
           <img src="../dist/img/user.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block"><?php echo $_SESSION["nombre"]?></a>
+          <?php $usr=$_SESSION["nombre"]?>
+          <a href="editusers.php?user=<?php echo $_SESSION["nombre"]?>" class="d-block"><?php echo $_SESSION["nombre"]?></a>
         </div>
       </div>
 
@@ -122,12 +123,6 @@
                   <i class="nav-icon fas fa-table"></i>
                   <p>Análisis avanzado</p>
                 </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>Retos</p>
-            </a>
           </li>
           <?php } else {?>
           <li class="nav-item">

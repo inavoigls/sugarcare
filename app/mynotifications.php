@@ -11,13 +11,13 @@ try {
     $cont=1;
     if(!$mysqli->connect_errno) {
         if($rs = $mysqli->query($query)){
-            while($row = $rs->fetch_assoc()){
-                $notificaciones[$i]["id"]=$row["id"];
-                $notificaciones[$i]["fecha"]=$row["fecha"];
-                $notificaciones[$i]["titulo"]=$row["titulo"];
-                $notificaciones[$i]["notificacion"]=$row["notificacion"];
-                $notificaciones[$i]["leida"]=$row["leida"];
-                if($row["leida"]==0){$no_leidas++;}
+            while($row_ntf = $rs->fetch_assoc()){
+                $notificaciones[$i]["id"]=$row_ntf["id"];
+                $notificaciones[$i]["fecha"]=$row_ntf["fecha"];
+                $notificaciones[$i]["titulo"]=$row_ntf["titulo"];
+                $notificaciones[$i]["notificacion"]=$row_ntf["notificacion"];
+                $notificaciones[$i]["leida"]=$row_ntf["leida"];
+                if($row_ntf["leida"]==0){$no_leidas++;}
                 $i++;
             }
         }

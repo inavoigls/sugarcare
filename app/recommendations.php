@@ -90,7 +90,7 @@ require_once "../config/configuration.php";
                             <h6 class="card-title"><b><?php echo $row["titulo"]?></b></h6>
 
                             <p class="card-text"><?php echo $row["recomendacion"]?></p>
-                            <a href="#" class="btn btn-primary">Leer más</a>
+                            <!--<a href="#" class="btn btn-primary">Leer más</a>-->
                           </div>
                         </div>
                         <?php

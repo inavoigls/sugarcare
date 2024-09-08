@@ -3,7 +3,7 @@ require_once("session.php");
 require_once "dbConnect.php";
 require_once "../config/configuration.php";
 function save(){
-if(isset($_POST["fecha"]) && $_POST["fecha"]!="" && isset($_POST["hora"]) && $_POST["hora"]!="" && isset($_POST["actividad"]) && $_POST["actividad"]!="" && isset($_POST["observaciones"])){
+if(isset($_POST["fecha"]) && $_POST["fecha"]!="" && isset($_POST["hora"]) && $_POST["hora"]!="" && isset($_POST["actividad"]) && $_POST["actividad"]!="" && isset($_POST["observaciones"]) && isset($_POST["puntuacion"])){
   $mysqli = dbConnect::connection();
   $usuario = $_SESSION['id'];
   $fecha = $_POST["fecha"];
@@ -12,10 +12,11 @@ if(isset($_POST["fecha"]) && $_POST["fecha"]!="" && isset($_POST["hora"]) && $_P
   $actividad = $_POST["actividad"];
   $observaciones = $_POST["observaciones"];
   $ruta = $_POST["ruta"];
+  $puntuacion=$_POST["puntuacion"];
   if($ruta!=""){
-    $query = 'INSERT INTO registro_actividad (usuario,fecha,hora,tiempo,actividad,observaciones,ruta) values ('.$usuario.',"'.$fecha.'","'.$hora.'","'.$tiempo.'","'.$actividad.'","'.$observaciones.'","'.$ruta.'");';
+    $query = 'INSERT INTO registro_actividad (usuario,fecha,hora,tiempo,actividad,observaciones,ruta,puntuacion) values ('.$usuario.',"'.$fecha.'","'.$hora.'","'.$tiempo.'","'.$actividad.'","'.$observaciones.'","'.$ruta.'",'.$puntuacion.');';
   } else {
-    $query = 'INSERT INTO registro_actividad (usuario,fecha,hora,tiempo,actividad,observaciones) values ('.$usuario.',"'.$fecha.'","'.$hora.'","'.$tiempo.'","'.$actividad.'","'.$observaciones.'");';
+    $query = 'INSERT INTO registro_actividad (usuario,fecha,hora,tiempo,actividad,observaciones,puntuacion) values ('.$usuario.',"'.$fecha.'","'.$hora.'","'.$tiempo.'","'.$actividad.'","'.$observaciones.'",'.$puntuacion.');';
   }
   try {
     if(!$mysqli->connect_errno) {
@@ -129,6 +130,17 @@ if(isset($_POST["fecha"]) && $_POST["fecha"]!="" && isset($_POST["hora"]) && $_P
                     <label>Observaciones</label>
                     <textarea class="form-control" rows="5" name="observaciones" placeholder="Describe como te sentiste durante la actividad realizada..."></textarea>
                     <textarea class="form-control" rows="5" id="ruta" name="ruta" hidden></textarea>
+                  </div>
+                  <div class="form-group" data-select2-id="29">
+                    <label>Puntuación</label>
+                    <select id="puntuacion" name="puntuacion" class="form-control" style="width: 100%;" type="text">
+                      <option data-select2-id="" selected="selected"></option>  
+                      <option data-select2-id="00">1</option>
+                      <option data-select2-id="01">2</option>
+                      <option data-select2-id="02">3</option>
+                      <option data-select2-id="03">4</option>
+                      <option data-select2-id="04">5</option>
+                    </select>
                   </div>
                 </div>
                 <div class="card-body" id="map"></div>
