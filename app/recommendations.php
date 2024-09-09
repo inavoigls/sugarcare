@@ -123,7 +123,7 @@ require_once "../config/configuration.php";
           
             <div class="card card-primary card-outline">
               <div class="card-header">
-                <h5 class="m-0">Actividad propuesta: <?php echo $row["actividad"]." ";for($i=0;$i<$row["puntuacion"];$i++){echo '<img src="../dist/img/star.png" width="18" height="18">';}?></h5>
+                <h5 class="m-0">Actividad propuesta: <?php echo $row["actividad"]." ";for($i=0;$i<$row["puntuacion"];$i++){echo '<img src="'.configuration::imgsrc.'star.png" width="18" height="18">';}?></h5>
               </div>
               <div class="card-body">
                 <h6 class="card-title"><b></b></h6>
