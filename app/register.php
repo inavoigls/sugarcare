@@ -82,7 +82,7 @@ if(isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password']) 
         <div class="form-group" data-select2-id="29">
           <label>Tipo</label>
           <select class="form-control" style="width: 100%;" type="text" name="tipo">
-            <option data-select2-id="01"></option>
+            <option data-select2-id="00"></option>
             <option data-select2-id="01">Usuario</option>
             <option data-select2-id="02">Personal Médico</option>
           </select>

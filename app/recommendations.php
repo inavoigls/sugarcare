@@ -29,6 +29,11 @@ require_once "../config/configuration.php";
   <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
+    <!-- Custom style -->
+    <link rel="stylesheet" href="../dist/css/custom.css">
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -103,19 +108,40 @@ require_once "../config/configuration.php";
           </div>
           <!-- /.col-md-6 -->
 
+          
+
           <!-- /.col-md-6 -->
           <div class="col-lg-6">
-            <!--<div class="card card-primary card-outline">
+          <?php
+          $query = "SELECT CONVERT(ruta USING utf8) as latlng, actividad, puntuacion FROM registro_actividad WHERE ruta<>'' AND usuario=".$_SESSION["id"]." AND puntuacion>=4";
+          //echo $query;
+          try {
+            $mysqli = dbConnect::connection();
+            if(!$mysqli->connect_errno) {
+              if($rs = $mysqli->query($query)){
+                while($row = $rs->fetch_assoc()){?>
+          
+            <div class="card card-primary card-outline">
               <div class="card-header">
-                <h5 class="m-0">title 1</h5>
+                <h5 class="m-0">Actividad propuesta: <?php echo $row["actividad"]." ";for($i=0;$i<$row["puntuacion"];$i++){echo '<img src="../dist/img/star.png" width="18" height="18">';}?></h5>
               </div>
               <div class="card-body">
-                <h6 class="card-title"><b>title 2</b></h6>
-
-                <p class="card-text">.</p>
-                <a href="#" class="btn btn-primary">Ir</a>
+                <h6 class="card-title"><b></b></h6>
+              <p class="card-text"><?php echo '<script>var latlngs="'.$row["latlng"].'";</script>'?></p>
+                <div class="card-body" id="map"></div>
+                <!--<a href="#" class="btn btn-primary">Ir</a>-->
               </div>
-            </div>-->    
+            </div>  
+          
+          <?php
+                       }
+                     }
+                   }
+                   $mysqli->close();
+                 } catch (Exception $ex) {
+                   echo $ex->getMessage();
+                 }
+            ?>
           </div>
           <!-- /.col-md-6 -->
         </div>
@@ -175,6 +201,74 @@ require_once "../config/configuration.php";
 <script src="../dist/js/app.js"></script>
 <!-- AdminLTE dashboard -->
 <script src="../dist/js/pages/dashboard.js"></script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="crossorigin=""></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script>
+		var prevLat = 0;
+		var prevLng = 0;
+    latlngs = JSON.parse(latlngs);
+		var polyline = L.polyline(latlngs, {color: 'red'});
+		var layerGroup = new L.LayerGroup();
+		var map_init = L.map('map', {
+            center: [40.44440164793993,-3.36398328277781],
+            zoom: 15
+        });
+		
+        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map_init);
+        L.Control.geocoder().addTo(map_init);		
+		if (!navigator.geolocation) {
+            console.log("Your browser doesn't support geolocation feature!")
+        }
+		draw();
+		
+		//Inicial
+		lat = 40.44440164793993;
+        long = -3.36398328277781;
+        var marker, circle, lat, long, accuracy;
+		marker = L.marker([lat, long])
+		var featureGroup = L.featureGroup([marker]).addTo(map_init)
+		
+		//Final
+		lat = 40.444309854899146;
+        long = -3.3638227961328764;
+        var marker, circle, lat, long, accuracy;
+		marker = L.marker([lat, long])
+		var featureGroup = L.featureGroup([marker]).addTo(map_init)
+		
+        function getPosition(position) {
+            lat = position.coords.latitude
+            long = position.coords.longitude
+            accuracy = position.coords.accuracy
+
+            if (marker) {
+                map_init.removeLayer(marker)
+            }
+
+
+            marker = L.marker([lat, long],{draggable:'true'})
+            var featureGroup = L.featureGroup([marker]).addTo(map_init)
+            map_init.fitBounds(featureGroup.getBounds())
+            console.log("Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy);
+			//ubicación inicial
+			if(prevLat==0 || prevLng==0){latlngs.push([lat, long]);prevLat=lat;prevLng=long;};
+
+			if(lat!=prevLat || long!=prevLng){
+				latlngs.push([lat, long]);
+				prevLat=lat;
+				prevLng=long;
+			};
+        }
+		
+		function draw(){
+			map_init.removeLayer(layerGroup);
+			layerGroup.addTo(map_init);
+			polyline = L.polyline(latlngs, {color: 'red'});
+			layerGroup.addLayer(polyline);
+			//console.log(latlngs);
+		}
+</script>
 <!-- Dependencias -->
 
 </body>

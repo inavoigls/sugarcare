@@ -198,7 +198,6 @@ function isRecordable(){
   }
 }
 function iniciarRuta(){
-  //console.log("iniciar ruta");
   document.getElementById("formulario").hidden = true;
   document.getElementById("guardar").hidden = true;
   document.getElementById("iniciar_ruta").hidden = true;
@@ -259,7 +258,6 @@ function iniciarRuta(){
 		}
 }
 function terminarRuta(){
-  //console.log("terminar ruta");
   document.getElementById("formulario").hidden = false;
   document.getElementById("guardar").hidden = false;
   document.getElementById("iniciar_ruta").hidden = true;

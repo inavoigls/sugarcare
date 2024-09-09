@@ -5,15 +5,63 @@ require_once "dbConnect.php";
 $mysqli = dbConnect::connection();
 $query = "SELECT * FROM usuarios as u INNER JOIN grupos_usuarios as gu ON gu.id = u.grupo LEFT JOIN datos_usuario as du ON du.usuario = u.id WHERE u.nombre='".$_GET["user"]."';";
 try {
+    $mysqli = dbConnect::connection();
     if(!$mysqli->connect_errno) {
         if($rs = $mysqli->query($query)){
             $row = $rs->fetch_assoc();
         }
-	}
-	$mysqli->close();
-    } catch (Exception $ex) {
-	    echo $ex->getMessage();
+	  }
+    $mysqli->close();
+} catch (Exception $ex) {
+  echo $ex->getMessage();
+}
+if(isset($_POST["nombre"]) && isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["fechanacimiento"]) && isset($_POST["altura"]) && isset($_POST["complexion"])) {
+  try {
+    $mysqli = dbConnect::connection();
+    if(!$mysqli->connect_errno) {
+      //Password
+      if($_POST["password"]!=""){
+        $query = "UPDATE usuarios SET password='".md5($_POST['password'])."' WHERE nombre='".$_GET["user"]."';";
+        $mysqli->query($query);
+      }
+      
+      //Email
+      if($_POST["email"]!=""){
+        $query = "UPDATE usuarios SET email='".$_POST["email"]."' WHERE nombre='".$_GET["user"]."';";
+        $mysqli->query($query);
+      }
+      
+      //Activo
+      if($_SESSION["idgrupo"]=="1"){
+        if($_POST["activo"]=="Y"){$activo = 1;} else {$activo = 0;}
+        $query = "UPDATE usuarios SET activo=".$activo." WHERE nombre='".$_GET["user"]."';";
+        $mysqli->query($query);
+      }
+      
+      //Fecha nacimiento
+      if($_POST["fechanacimiento"]!=""){
+        $query = "UPDATE datos_usuario SET fechanacimiento='".$_POST["fechanacimiento"]."' WHERE usuario='".$row['usuario']."';";
+        $mysqli->query($query);
+      }
+      
+      //Altura
+      if($_POST["altura"]!=""){
+        $query = "UPDATE datos_usuario SET altura='".$_POST["altura"]."' WHERE usuario='".$row['usuario']."';";
+        $mysqli->query($query);
+      }
+      
+      //Complexión
+      if($_POST["complexion"]!=""){
+        $query = "UPDATE datos_usuario SET complexion='".$_POST["complexion"]."' WHERE usuario='".$row['usuario']."';";
+        $mysqli->query($query);
+      }
     }
+    $mysqli->close();
+    header("Location: editusers.php?user=".$row['nombre']);
+  } catch (Exception $ex) {
+    echo $ex->getMessage();
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,7 +123,7 @@ try {
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="editusers.php" method="post">
+              <form method="post">
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Nombre</label>
@@ -87,33 +135,33 @@ try {
                   </div>
                   <div class="form-group">
                     <label for="exampleInputPassword1">Contraseña</label>
-                    <input type="password" class="form-control" id="password" placeholder="Password">
+                    <input type="password" class="form-control" name="password" placeholder="Password">
                   </div>
                   <div class="form-group">
                     <label for="exampleInput">Fecha nacimiento</label>
-                    <input type="text" class="form-control" id="edad" placeholder="fechanacimiento" value="<?php echo $row['fechanacimiento'];?>">
+                    <input type="text" class="form-control" name="fechanacimiento"  placeholder="fechanacimiento" value="<?php echo $row['fechanacimiento'];?>">
                   </div>
                   <div class="form-group">
                     <label for="exampleInput">Altura</label>
-                    <input type="text" class="form-control" id="altura" placeholder="altura" value="<?php echo $row['altura'];?>">
+                    <input type="text" class="form-control" name="altura" placeholder="altura" value="<?php echo $row['altura'];?>">
                   </div>
                   <div class="form-group" data-select2-id="29">
                     <label>Complexión</label>
-                    <select class="form-control" style="width: 100%;" type="text" name="Complexión">
+                    <select class="form-control" style="width: 100%;" type="text" name="complexion">
                     <option data-select2-id="00" <?php if($row['complexion']==""){echo 'selected="selected"';}?>></option>
                       <option data-select2-id="01" <?php if($row['complexion']=="Pequeña"){echo 'selected="selected"';}?>>Pequeña</option>
                       <option data-select2-id="02" <?php if($row['complexion']=="Mediana"){echo 'selected="selected"';}?>>Mediana</option>
                       <option data-select2-id="03" <?php if($row['complexion']=="Grande"){echo 'selected="selected"';}?>>Grande</option>
                     </select>
                   </div>
-
+                  <?php if($_SESSION["idgrupo"]=="1"){?>
                   <div class="form-group" data-select2-id="29">
                     <label>Activo</label>
-                    <select class="form-control" style="width: 100%;" type="text" name="Complexión">
+                    <select class="form-control" style="width: 100%;" type="text" name="activo">
                       <option data-select2-id="01" <?php if($row['activo']=="1"){echo 'selected="selected"';}?>>Y</option>
                       <option data-select2-id="02" <?php if($row['activo']=="0"){echo 'selected="selected"';}?>>N</option>
                     </select>
-                  </div>
+                  </div><?php } ?>
                 </div>
                 <!-- /.card-body -->
 

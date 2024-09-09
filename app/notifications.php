@@ -93,13 +93,14 @@ check();
                   <tr>
                     <th>Fecha</th>
                     <th>Notificación</th>
+                    <th>Remitente</th>
                     <th>Descripción</th>
                     <th>Accciones</th>
                   </tr>
                   </thead>
                   <tbody>
                   <?php 
-                  $query = "SELECT n.id, n.fecha, n.titulo, n.notificacion, n.leida FROM notificaciones n INNER JOIN usuarios u on u.id = n.usuario WHERE u.nombre = '".$_SESSION["nombre"]."' ORDER BY n.id ASC;";
+                  $query = "SELECT n.id, n.fecha, n.titulo, n.notificacion, n.leida, n.remitente FROM notificaciones n INNER JOIN usuarios u on u.id = n.usuario WHERE u.nombre = '".$_SESSION["nombre"]."' ORDER BY n.id ASC;";
                   try {
                     $mysqli = dbConnect::connection();
                     $cont=1;
@@ -108,6 +109,10 @@ check();
                         while($row = $rs->fetch_assoc()){
                           echo "<tr><td>".$row["fecha"]."</td>";
                           if($row["leida"]== 0){echo "<td><b>".$row["titulo"]."</b></td>";}else {echo "<td>".$row["titulo"]."</td>";}
+                          $query2 = "SELECT nombre FROM usuarios WHERE id=".$row["remitente"];
+                          $rs2 = $mysqli->query($query2);
+                          $row2 = $rs2->fetch_assoc();
+                          echo "<td>".$row2["nombre"]."</td>";
                           echo "<td>".$row["notificacion"]."</td>";
                           echo "<td><a href='notifications.php?read=".$row["id"]."'>Leer</a> | <a href='notifications.php?delete=".$row["id"]."'>Eliminar</a></td></tr>";
                         }
@@ -121,10 +126,11 @@ check();
                   </tbody>
                   <!--<tfoot>
                   <tr>
-                    <th>Id</th>
                     <th>Fecha</th>
                     <th>Notificación</th>
+                    <th>Remitente</th>
                     <th>Descripción</th>
+                    <th>Accciones</th>
                   </tr>
                   </tfoot>-->
                 </table>

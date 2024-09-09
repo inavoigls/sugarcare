@@ -2,31 +2,32 @@
 require_once("session.php");
 require_once "../config/configuration.php";
 require_once "dbConnect.php";
-/*$mysqli = dbConnect::connection();
-$query = "SELECT * FROM usuarios as u INNER JOIN grupos_usuarios as gu on gu.id = u.grupo WHERE nombre='".$_GET["user"]."';";
-try {
-    if(!$mysqli->connect_errno) {
-        if($rs = $mysqli->query($query)){
-        $row = $rs->fetch_assoc();
-        //$row["id"]
-        //$row['nombre']
-        //$row["email"]
-        //$row["fechaalta"]
-        //$row["grupo"]
-        //$row["activo"]     
-        }
-	}
-	$mysqli->close();
+$mysqli = dbConnect::connection();
+if(isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['password2'])){
+  if($_POST['name']!="" && $_POST['email']!="" && ($_POST['password'] == $_POST['password2'])){
+    if($_POST['tipo']=="Usuario") {
+      $tipo=2;
+    } else {$tipo=3;}
+    $query = "INSERT INTO usuarios (nombre,email,password,fechaalta,grupo) values ('".$_POST['name']."','".$_POST['email']."','".md5($_POST['password'])."','".date("d-m-Y")."',$tipo);";
+    try { 
+	    if(!$mysqli->connect_errno) {
+        $rs = $mysqli->query($query);  
+        if($mysqli->affected_rows==-1){echo "Error al intentar crear el usuario";}
+        else {echo "Usuario creado";}
+		  }		
+	    $mysqli->close();
     } catch (Exception $ex) {
 	    echo $ex->getMessage();
-    }*/
+    } 
+  } else {echo "Las contraseñas deben coincidir";}
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SugarCare | New Users</title>
+  <title>SugarCare | Nuevo usuario</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -81,11 +82,11 @@ try {
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form>
+              <form method="post">
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Nombre</label>
-                    <input type="text" class="form-control" name="nombre" placeholder="Nombre">
+                    <input type="text" class="form-control" name="name" placeholder="Nombre">
                   </div>
                   <div class="form-group">
                     <label for="exampleInputEmail1">Email</label>
@@ -93,24 +94,20 @@ try {
                   </div>
                   <div class="form-group">
                     <label for="exampleInputPassword1">Contraseña</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password">
                   </div>
-                  <!--<div class="form-group">
-                    <label for="exampleInputFile">File input</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="exampleInputFile">
-                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                      </div>
-                      <div class="input-group-append">
-                        <span class="input-group-text">Upload</span>
-                      </div>
-                    </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Repite la contraseña</label>
+                    <input type="password" class="form-control" name="password2" id="exampleInputPassword1" placeholder="Password">
                   </div>
-                  <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                  </div>-->
+                  <div class="form-group" data-select2-id="29">
+                    <label>Tipo</label>
+                    <select class="form-control" style="width: 100%;" type="text" name="tipo">
+                      <option data-select2-id="00"></option>
+                      <option data-select2-id="01">Usuario</option>
+                      <option data-select2-id="02">Personal Médico</option>
+                    </select>
+                  </div>
                 </div>
                 <!-- /.card-body -->
 
@@ -146,7 +143,7 @@ try {
 <script src="../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
+<!-- AdminLTE -->
 <script src="../dist/js/app.js"></script>
 <!-- Page specific script -->
 <script>
