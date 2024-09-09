@@ -13,8 +13,11 @@
           <img src="../dist/img/user.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <?php $usr=$_SESSION["nombre"]?>
+        <?php if(!isset($_SESSION["medicalview"])) {?>
           <a href="editusers.php?user=<?php echo $_SESSION["nombre"]?>" class="d-block"><?php echo $_SESSION["nombre"]?></a>
+        <?php } else {?>
+          <a href="#" class="d-block"><?php echo $_SESSION["nombre"]?></a>
+        <?php } ?>
         </div>
       </div>
 
@@ -39,6 +42,7 @@
               <p>Dashboard</p>
             </a>
           </li>
+          <?php if(!isset($_SESSION["medicalview"])) {?>
           <li class="nav-item">
             <a href="search.php" class="nav-link">
               <i class="nav-icon fas fa-search"></i>
@@ -56,50 +60,54 @@
               <i class="nav-icon far fa-bell"></i>
               <p>Notificaciones</p>
             </a>
-          </li>
+          </li><?php }?>
           <?php if($_SESSION["idgrupo"]=="2") {?>
+          <?php if(!isset($_SESSION["medicalview"])) {?>
           <li class="nav-item">
             <a href="glicemia-record.php" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
               <p>Registro Glicemia</p>
             </a>
-          </li>
+          </li><?php }?>
           <li class="nav-item">
             <a href="glicemia-history.php" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
               <p>Diario de Glicemia</p>
             </a>
           </li>
+          <?php if(!isset($_SESSION["medicalview"])) {?>
           <li class="nav-item">
             <a href="weight-record.php" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
               <p>Registro Peso</p>
             </a>
-          </li>
+          </li><?php }?>
           <li class="nav-item">
             <a href="weight-history.php" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
               <p>Diario de Peso</p>
             </a>
           </li>
+          <?php if(!isset($_SESSION["medicalview"])) {?>
           <li class="nav-item">
             <a href="food-record.php" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>Registro de comidas</p>
             </a>
-          </li>
+          </li><?php }?>
           <li class="nav-item">
                 <a href="food-history.php" class="nav-link">
                   <i class="nav-icon fas fa-file"></i>
                   <p>Diario de comidas</p>
                 </a>
           </li>
+          <?php if(!isset($_SESSION["medicalview"])) {?>
           <li class="nav-item">
                 <a href="activity-record.php" class="nav-link">
                   <i class="nav-icon fas fa-edit"></i>
                   <p>Registro Actividad</p>
                 </a>
-          </li>
+          </li><?php }?>
           <li class="nav-item">
             <a href="activity-history.php" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
@@ -112,19 +120,27 @@
                   <p>Historia Clínica</p>
                 </a>
           </li>
+          <?php if(!isset($_SESSION["medicalview"])) {?>
           <li class="nav-item">
                 <a href="recommendations.php" class="nav-link">
                   <i class="nav-icon fas fa-book"></i>
                   <p>Recomendaciones</p>
                 </a>
-          </li>
+          </li><?php }?>
           <li class="nav-item">
                 <a href="advance-analysis.php" class="nav-link">
                   <i class="nav-icon fas fa-table"></i>
                   <p>Análisis avanzado</p>
                 </a>
           </li>
-          <?php } else {?>
+          <?php } if($_SESSION["idgrupo"]=="3"){?>
+          <li class="nav-item">
+                <a href="patients.php" class="nav-link">
+                  <i class="nav-icon fas fa-users"></i>
+                  <p>Pacientes</p>
+                </a>
+          </li>
+          <?php } if($_SESSION["idgrupo"]=="1"){?>
           <li class="nav-item">
                 <a href="users.php" class="nav-link">
                   <i class="nav-icon fas fa-users"></i>
@@ -136,12 +152,19 @@
                   <i class="nav-icon fas fa-users"></i>
                   <p>Grupos</p>
                 </a>
-          </li><?php }?>          
+          </li><?php }?>
+          <?php if(isset($_SESSION["medicalview"]) && isset($_SESSION["prevuser"])){ ?>
+          <li class="nav-item">
+            <a href="sso.php?medicalview=false" class="nav-link">
+              <p>Volver</p>
+            </a>
+          </li>
+          <?php }  else { ?>
           <li class="nav-item">
             <a href="logout.php" class="nav-link">
               <p>Salir</p>
             </a>
-          </li>
+          </li><?php } ?>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

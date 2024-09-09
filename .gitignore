@@ -1,2 +1,4 @@
 # Configuración
 config/*
+# Database/factories
+database/*

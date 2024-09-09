@@ -53,7 +53,7 @@ require_once "../config/configuration.php";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Recomendaciones</h1>
+            <h1 class="m-0">Salud colaborativa</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -75,26 +75,23 @@ require_once "../config/configuration.php";
         <div class="row">
         <div class="col-lg-6">
             <?php 
-                 $query = "SELECT r.id, r.orden,r.titulo, r.recomendacion FROM recomendaciones r INNER JOIN usuarios u on u.id = r.usuario WHERE u.nombre = '".$_SESSION["nombre"]."';";
+                 $query = "SELECT r.id, r.titulo, r.recomendacion FROM recomendaciones r INNER JOIN usuarios u on u.id = r.usuario WHERE u.nombre = '".$_SESSION["nombre"]."';";
                  try {
                    $mysqli = dbConnect::connection();
-                   $cont=1;
                    if(!$mysqli->connect_errno) {
                      if($rs = $mysqli->query($query)){
                        while($row = $rs->fetch_assoc()){?>
                         <div class="card card-primary card-outline">
                             <div class="card-header">
-                            <h5 class="m-0"><?php echo "Recomendación $cont" ?></h5>
+                            <h5 class="m-0"><?php echo "<b>".$row["titulo"]."</b>" ?></h5>
                           </div>
                           <div class="card-body">
-                            <h6 class="card-title"><b><?php echo $row["titulo"]?></b></h6>
-
+                            <!--<h6 class="card-title"><b></b></h6>-->
                             <p class="card-text"><?php echo $row["recomendacion"]?></p>
                             <!--<a href="#" class="btn btn-primary">Leer más</a>-->
                           </div>
                         </div>
                         <?php
-                        $cont++;
                        }
                      }
                    }

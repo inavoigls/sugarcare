@@ -118,7 +118,7 @@ try {
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Guardar</button> <button type="submit" class="btn btn-primary">Eliminar</button>
+                  <button type="submit" class="btn btn-primary">Guardar</button><?php if($_SESSION["idgrupo"]==1) {?> <button type="submit" class="btn btn-primary">Eliminar</button><?php } ?>
                 </div>
               </form>
             </div>          

@@ -102,7 +102,8 @@ require_once("../config/configuration.php");
                         if(!$mysqli->connect_errno) {
                           if($rs = $mysqli->query($query)){
                             while($row = $rs->fetch_assoc()){
-                              echo '<a href="#">'.$row["nombre_medico"].'</a>';
+                              if($row["medico"]==""){echo "No hay médico asignado aún";} 
+                              else {echo '<a href="send-message.php?usr='.$row["medico"].'">'.$row["nombre_medico"].'</a>';}
                             }
                           }
                         }

@@ -4,7 +4,10 @@ require_once "../config/configuration.php";
 $mysqli = dbConnect::connection();
 if(isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['password2'])){
   if($_POST['name']!="" && $_POST['email']!="" && ($_POST['password'] == $_POST['password2'])){
-    $query = "INSERT INTO usuarios (nombre,email,password,fechaalta,grupo) values ('".$_POST['name']."','".$_POST['email']."','".md5($_POST['password'])."','".date("d-m-Y")."',1);";
+    if($_POST['tipo']=="Usuario") {
+      $tipo=2;
+    } else {$tipo=3;}
+    $query = "INSERT INTO usuarios (nombre,email,password,fechaalta,grupo) values ('".$_POST['name']."','".$_POST['email']."','".md5($_POST['password'])."','".date("d-m-Y")."',$tipo);";
     try { 
 	    if(!$mysqli->connect_errno) {
         $rs = $mysqli->query($query);  
@@ -23,7 +26,7 @@ if(isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password']) 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SugarCare | Register</title>
+  <title>SugarCare | Registrar usuario</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -38,7 +41,7 @@ if(isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password']) 
 <div class="register-box">
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="index.php" class="h1"><b>Sugar</b>Care</a>
+      <a href="../index.php" class="h1"><b>Sugar</b>Care</a>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Registrar una nuevo usuario</p>
@@ -75,6 +78,14 @@ if(isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password']) 
               <span class="fas fa-lock"></span>
             </div>
           </div>
+        </div>
+        <div class="form-group" data-select2-id="29">
+          <label>Tipo</label>
+          <select class="form-control" style="width: 100%;" type="text" name="tipo">
+            <option data-select2-id="01"></option>
+            <option data-select2-id="01">Usuario</option>
+            <option data-select2-id="02">Personal Médico</option>
+          </select>
         </div>
         <div class="row">
           <div class="col-8">

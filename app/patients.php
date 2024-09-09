@@ -1,38 +1,15 @@
 <?php 
 require_once("session.php");
-require_once "dbConnect.php";
 require_once "../config/configuration.php";
-function check(){
-$mysqli = dbConnect::connection();
-  if(isset($_GET["read"])){
-    $query = "UPDATE notificaciones as n INNER JOIN usuarios u on u.id = n.usuario SET n.leida = 1 WHERE n.id = ".$_GET["read"]." and u.nombre = '".$_SESSION["nombre"]."';";
-    try { 
-	    if(!$mysqli->connect_errno) {
-        $rs = $mysqli->query($query);
-		  }
-    } catch (Exception $ex) {
-	    echo $ex->getMessage();
-    }
-  } else if (isset($_GET["delete"])){
-    $query = "DELETE FROM notificaciones as n WHERE n.id = ".$_GET["delete"].";";
-    try { 
-	    if(!$mysqli->connect_errno) {
-        $rs = $mysqli->query($query);
-		  }
-    } catch (Exception $ex) {
-	    echo $ex->getMessage();
-    }
-  }
-  $mysqli->close();
-}
-check();
+require_once "dbConnect.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SugarCare | Notificaciones</title>
+  <title>SugarCare | Pacientes</title>
+
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -65,12 +42,12 @@ check();
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Notificaciones</h1>
+            <h1>Pacientes</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="main.php">Home</a></li>
-              <li class="breadcrumb-item active">Notificaciones</li>
+              <li class="breadcrumb-item active">Pacientes</li>
             </ol>
           </div>
         </div>
@@ -84,51 +61,52 @@ check();
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title"></h3>
+                <h3 class="card-title">Listado de pacientes</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Fecha</th>
-                    <th>Notificación</th>
-                    <th>Descripción</th>
-                    <th>Accciones</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Fecha Alta</th>
+                    <th>Grupo</th>
+                    <th>Acciones</th>
                   </tr>
                   </thead>
                   <tbody>
                   <?php 
-                  $query = "SELECT n.id, n.fecha, n.titulo, n.notificacion, n.leida FROM notificaciones n INNER JOIN usuarios u on u.id = n.usuario WHERE u.nombre = '".$_SESSION["nombre"]."' ORDER BY n.id ASC;";
-                  try {
-                    $mysqli = dbConnect::connection();
-                    $cont=1;
-                    if(!$mysqli->connect_errno) {
+                  $mysqli = dbConnect::connection();
+                  $query = "SELECT * FROM usuarios as u INNER JOIN grupos_usuarios as gu on gu.id = u.grupo LEFT JOIN usuarios_medicos um on um.usuario = u.id WHERE gu.id=2 and um.medico = ".$_SESSION["id"];
+                  try { 
+	                  if(!$mysqli->connect_errno) {
                       if($rs = $mysqli->query($query)){
                         while($row = $rs->fetch_assoc()){
-                          echo "<tr><td>".$row["fecha"]."</td>";
-                          if($row["leida"]== 0){echo "<td><b>".$row["titulo"]."</b></td>";}else {echo "<td>".$row["titulo"]."</td>";}
-                          echo "<td>".$row["notificacion"]."</td>";
-                          echo "<td><a href='notifications.php?read=".$row["id"]."'>Leer</a> | <a href='notifications.php?delete=".$row["id"]."'>Eliminar</a></td></tr>";
+                          echo "<tr><td><a href='sso.php?user=".$row['usuario']."&medicalview=true'>".$row["nombre"]."</a></td>";
+                          echo "<td>".$row["email"]."</td>";
+                          echo "<td>".$row["fechaalta"]."</td>";
+                          echo "<td>".$row["grupo"]."</td>";
+                          echo "<td><a href='send-message.php?usr=".$row['usuario']."'>Enviar mensaje</a></td></tr>";
                         }
                       }
 		                }
 	                  $mysqli->close();
                   } catch (Exception $ex) {
 	                  echo $ex->getMessage();
-                  }
+                  } 
                   ?>
                   </tbody>
                   <!--<tfoot>
                   <tr>
-                    <th>Id</th>
-                    <th>Fecha</th>
-                    <th>Notificación</th>
-                    <th>Descripción</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Fecha Alta</th>
+                    <th>Grupo</th>
+                    <th>Acciones</th>
                   </tr>
                   </tfoot>-->
                 </table>
-                
               </div>
               <!-- /.card-body -->
             </div>

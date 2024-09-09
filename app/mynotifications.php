@@ -5,7 +5,7 @@ require_once("../config/configuration.php");
 $notificaciones=[];
 $i=0;
 $no_leidas=0;
-$query = "SELECT n.id, n.orden, n.fecha, n.titulo, n.notificacion, n.leida FROM notificaciones n INNER JOIN usuarios u on u.id = n.usuario WHERE u.nombre = '".$_SESSION["nombre"]."' ORDER BY n.id ASC;";
+$query = "SELECT n.id, n.fecha, n.titulo, n.notificacion, n.leida FROM notificaciones n INNER JOIN usuarios u on u.id = n.usuario WHERE u.nombre = '".$_SESSION["nombre"]."' ORDER BY n.id ASC;";
 try {
     $mysqli = dbConnect::connection();
     $cont=1;

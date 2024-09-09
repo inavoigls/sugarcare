@@ -8,7 +8,6 @@ if(isset($_POST['email']) && isset($_POST['password'])){
   if($_POST['email']!="" && $_POST['password'] != ""){
     require_once "app/dbConnect.php";
     $mysqli = dbConnect::connection();
-    //$query = "SELECT id, nombre, email, activo, grupo FROM usuarios WHERE email='".$_POST['email']."' and password='".md5($_POST['password'])."' and activo = 1;";
     $query = "SELECT u.id,u.nombre,u.email,u.fechaalta,u.activo,u.grupo,g.grupo as nombregrupo,du.fechanacimiento,du.altura,du.complexion,du.foto 
     FROM USUARIOS as u 
     INNER JOIN grupos_usuarios as gu on gu.id = u.grupo 
@@ -41,7 +40,6 @@ if(isset($_POST['email']) && isset($_POST['password'])){
     } 
   }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
