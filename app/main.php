@@ -103,7 +103,11 @@ require_once("../config/configuration.php");
                           if($rs = $mysqli->query($query)){
                             while($row = $rs->fetch_assoc()){
                               if($row["medico"]==""){echo "No hay médico asignado aún";} 
-                              else {echo '<a href="send-message.php?usr='.$row["medico"].'">'.$row["nombre_medico"].'</a>';}
+                              else {echo '<a href="send-message.php?usr='.$row["medico"].'">'.$row["nombre_medico"].'</a>';
+                                if(!isset($_SESSION["medicalview"])) {
+                                  echo ' | <a href="../api/unallocate.php?key='.base64_encode(configuration::hash.$row["medico"]."_".$_SESSION["id"]).'">Eliminar asignación</a>';
+                                }
+                              }
                             }
                           }
                         }
@@ -184,10 +188,10 @@ require_once("../config/configuration.php");
 <!-- Page specific script -->
 <!-- Dependencias -->
 
-<?php $hash="4G{ZGnf9q]YCkq4%Qy6Qx_";echo '<script>var option="'.base64_encode($hash.$_SESSION["id"]).'";</script>';?>
+<?php echo '<script>var option="'.base64_encode(configuration::hash.$_SESSION["id"]).'";var url_api="'.configuration::url_api.'";</script>';?>
 <script>
 function generarCodigoQr() {
-    let url = "http://192.168.1.166/projects/sugarcare/api/assign.php?key="+option;
+    let url = url_api+"assign.php?key="+option;
     console.log(url);
     let contenedorCodigoQr = document.getElementById("codigoqr");
     new QRCode(contenedorCodigoQr, url);
