@@ -113,8 +113,7 @@ require_once "../config/configuration.php";
           <!-- /.col-md-6 -->
           <div class="col-lg-6">
           <?php
-          $query = "SELECT CONVERT(ruta USING utf8) as latlng, actividad, puntuacion FROM registro_actividad WHERE ruta<>'' AND usuario=".$_SESSION["id"]." AND puntuacion>=4";
-          //echo $query;
+          $query = "SELECT CONVERT(ruta USING utf8) as latlng, actividad, puntuacion FROM registro_actividad WHERE ruta<>'' ORDER BY puntuacion DESC LIMIT 1";
           try {
             $mysqli = dbConnect::connection();
             if(!$mysqli->connect_errno) {
@@ -206,11 +205,12 @@ require_once "../config/configuration.php";
 <script>
 		var prevLat = 0;
 		var prevLng = 0;
-    latlngs = JSON.parse(latlngs);
+    var latlngs = JSON.parse(latlngs);
+    var center = latlngs[0];
 		var polyline = L.polyline(latlngs, {color: 'red'});
 		var layerGroup = new L.LayerGroup();
 		var map_init = L.map('map', {
-            center: [40.44440164793993,-3.36398328277781],
+            center: [center[0],center[1]],
             zoom: 15
         });
 		
@@ -224,16 +224,17 @@ require_once "../config/configuration.php";
 		draw();
 		
 		//Inicial
-		lat = 40.44440164793993;
-        long = -3.36398328277781;
-        var marker, circle, lat, long, accuracy;
+		lat = center[0];
+    long = center[1];
+    var marker, circle, lat, long, accuracy;
 		marker = L.marker([lat, long])
 		var featureGroup = L.featureGroup([marker]).addTo(map_init)
 		
 		//Final
-		lat = 40.444309854899146;
-        long = -3.3638227961328764;
-        var marker, circle, lat, long, accuracy;
+    var final=latlngs[latlngs.length-1];
+		var lat = final[0];
+    var long = final[1];
+    var marker, circle, lat, long, accuracy;
 		marker = L.marker([lat, long])
 		var featureGroup = L.featureGroup([marker]).addTo(map_init)
 		
@@ -266,7 +267,6 @@ require_once "../config/configuration.php";
 			layerGroup.addTo(map_init);
 			polyline = L.polyline(latlngs, {color: 'red'});
 			layerGroup.addLayer(polyline);
-			//console.log(latlngs);
 		}
 </script>
 <!-- Dependencias -->

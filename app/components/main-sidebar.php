@@ -64,15 +64,15 @@
           <?php if($_SESSION["idgrupo"]=="2") {?>
           <?php if(!isset($_SESSION["medicalview"])) {?>
           <li class="nav-item">
-            <a href="glicemia-record.php" class="nav-link">
+            <a href="glycaemia-record.php" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
-              <p>Registro Glicemia</p>
+              <p>Registro Glucemia</p>
             </a>
           </li><?php }?>
           <li class="nav-item">
-            <a href="glicemia-history.php" class="nav-link">
+            <a href="glycaemia-history.php" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
-              <p>Diario de Glicemia</p>
+              <p>Diario de Glucemia</p>
             </a>
           </li>
           <?php if(!isset($_SESSION["medicalview"])) {?>

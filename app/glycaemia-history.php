@@ -8,7 +8,7 @@ require_once "../config/configuration.php";
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SugarCare | Glucose history</title>
+  <title>SugarCare | Histórico Glucemia</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -42,12 +42,12 @@ require_once "../config/configuration.php";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Histórico Glicemia</h1>
+            <h1>Histórico Glucemia</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="main.php">Home</a></li>
-              <li class="breadcrumb-item active">Histórico Glicemia</li>
+              <li class="breadcrumb-item active">Histórico Glucemia</li>
             </ol>
           </div>
         </div>
