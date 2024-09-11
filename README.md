@@ -20,6 +20,9 @@ interface configuration {
     const database = '';
 }
 
-## 2.Cargar datapack
+## 2.Cargar modelo
+## 3.Registro usuario administrador
+## 4.Registro usuario de prueba
+## 5.Registro usuario médico de prueba
 
 ![ejemplo matriz](./attribution/images/app.jpg)
