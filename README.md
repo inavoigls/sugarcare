@@ -12,10 +12,10 @@ APP_URL= "URL_HOST"
 APP_KEY= "APP_KEY"
 
 # Configuración
-### 1.Crear dentro del directorio config el fichero configuration.php
+### 1.Archivo .env
 Abra el archivo .env (directorio raiz) y modifique según su conexión, en este ejemplo se detalla configuración con XAMPP y bases de datos mysql (deben crearla manualmente a través de phpMyAdmin).
 
-DB_CONNECTION=mysql
+DB_CONNECTION=
 DB_HOST=
 DB_PORT=
 DB_DATABASE=
@@ -27,8 +27,8 @@ Para terminar el proceso de creación de tablas utilizaremos nuevamente:
 
 php artisan migrate
 
-### 3.Registro usuario administrador
-### 4.Registro usuario de prueba
-### 5.Registro usuario médico de prueba
+### 3.Registre usuario administrador
+### 4.Registre usuario de prueba
+### 5.Registre usuario médico de prueba
 
 ![ejemplo matriz](./attribution/images/app.jpg)
