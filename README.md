@@ -23,7 +23,7 @@ DB_USERNAME=
 DB_PASSWORD=
 
 ### 2.Cargar modelo
-Para terminar el proceso de creación de tablas utilizaremos nuevamente:
+Para terminar el proceso de creación de tablas utilizaremos:
 
 php artisan migrate
 
